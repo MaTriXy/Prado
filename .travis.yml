@@ -17,9 +17,12 @@ android:
   - addon
 
 before_script:
- - mkdir "$ANDROID_HOME/licenses" || true
- - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
- - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+  - adb shell input keyevent 82 &
+  - wget --user ${ARTIFACTORY_USER} --password ${ARTIFACTORY_PWD} "https://artifacts.schibsted.io/artifactory/libs-release-local/com/schibsted/engprod/moka-client/0.5.3/moka-client-0.5.3.jar" -O moka-client.jar
+  - mkdir "$ANDROID_HOME/licenses" || true
+  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+  - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
 
 script:
   - ./gradlew build
+  - java -jar moka-client.jar --EXECUTE_CUSTOM="./gradlew connectedDebugAndroidTest -PdisablePreDex -Pandroid.testInstrumentationRunnerArguments.notAnnotation=android.support.test.filters.FlakyTest"
