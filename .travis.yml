@@ -25,4 +25,4 @@ before_script:
 
 script:
   - ./gradlew prado:build
-  - java -jar moka-client.jar --EXECUTE_CUSTOM="./gradlew connectedFullDebugAndroidTest -PdisablePreDex -Pandroid.testInstrumentationRunnerArguments.notAnnotation=android.support.test.filters.FlakyTest"
+  - java -jar moka-client.jar --EXECUTE_CUSTOM="./gradlew connectedDebugAndroidTest -PdisablePreDex -Pandroid.testInstrumentationRunnerArguments.notAnnotation=android.support.test.filters.FlakyTest"
