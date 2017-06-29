@@ -6,6 +6,14 @@ branches:
     - master
     - /^v\d+\.\d+\.\d+$/
 
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
 android:
   components:
   - tools
@@ -19,7 +27,7 @@ android:
 
 before_script:
   - echo no | android create avd --force -n test -t android-21 --abi google_apis/armeabi-v7a
-  - emulator -memory 1024 -avd test -no-window -gpu off -no-boot-anim &
+  - emulator -memory 1024 -avd test -no-audio -no-window -gpu off -no-boot-anim &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
   - mkdir "$ANDROID_HOME/licenses" || true
@@ -27,5 +35,5 @@ before_script:
   - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
 
 script:
-  - ./gradlew prado:build
+  - ./gradlew prado:build --continue
   - ./gradlew prado:connectedDebugAndroidTest -PdisablePreDex
